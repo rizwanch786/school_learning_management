@@ -8,7 +8,7 @@ def path_and_rename(instance, filename):
     ext = filename.split('.')[-1]
     # get filename
     if instance.pk:
-        filename = 'User_Profile_Pictures/{}.{}'.format(instance.pk, ext)
+        filename = f'User_Profile_Pictures/{instance.pk}.{ext}'
     return os.path.join(upload_to, filename)
 
 class UserProfileInfo(models.Model):
