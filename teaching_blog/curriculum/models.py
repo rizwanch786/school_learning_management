@@ -22,7 +22,7 @@ def save_subject_image(instance, filename):
     ext = filename.split('.')[-1]
     # get filename
     if instance.subject_id:
-        filename = 'Subject_Pictures/{}.{}'.format(instance.subject_id, ext)
+        filename = f'Subject_Pictures/{instance.subject_id}.{ext}'
     return os.path.join(upload_to, filename)
 
 class Subject(models.Model):
@@ -46,10 +46,10 @@ def save_lesson_files(instance, filename):
     ext = filename.split('.')[-1]
     # get filename
     if instance.lesson_id:
-        filename = 'lesson_files/{}/{}.{}'.format(instance.lesson_id,instance.lesson_id, ext)
+        filename = f'lesson_files/{instance.lesson_id}/{instance.lesson_id}.{ext}'
         if os.path.exists(filename):
-            new_name = str(instance.lesson_id) + str('1')
-            filename =  'lesson_images/{}/{}.{}'.format(instance.lesson_id,new_name, ext)
+            new_name = f'{str(instance.lesson_id)}1'
+            filename = f'lesson_images/{instance.lesson_id}/{new_name}.{ext}'
     return os.path.join(upload_to, filename)
 
 class Lesson(models.Model):
@@ -90,7 +90,7 @@ class TimeSlots(models.Model):
     end_time = models.TimeField()
 
     def __str__(self):
-        return str(self.start_time) + ' - ' + str(self.end_time) 
+        return f'{str(self.start_time)} - {str(self.end_time)}' 
 
 class SlotSubject(models.Model):
     standard = models.ForeignKey(Standard, on_delete=models.CASCADE,related_name='standard_slots')
@@ -99,7 +99,7 @@ class SlotSubject(models.Model):
     slot_subject = models.ForeignKey(Subject, on_delete=models.CASCADE,related_name='standard_slots_subject')
 
     def __str__(self):
-        return str(self.standard)+ ' - ' + str(self.day) + ' - ' + str(self.slot) + ' - ' + str(self.slot_subject)
+        return f'{str(self.standard)} - {str(self.day)} - {str(self.slot)} - {str(self.slot_subject)}'
 
 class Comment(models.Model):
     lesson_name = models.ForeignKey(Lesson,null=True, on_delete=models.CASCADE,related_name='comments')
@@ -126,4 +126,4 @@ class Reply(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "reply to " + str(self.comment_name.comm_name)
+        return f"reply to {str(self.comment_name.comm_name)}"

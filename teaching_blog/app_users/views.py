@@ -10,24 +10,19 @@ from .models import UserProfileInfo, Contact
 from django.views.generic import CreateView
 
 def user_login(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request,user)
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                return HttpResponse("ACCOUNT IS DEACTIVATED")
-        else:
-            return HttpResponse("Please use correct id and password")
-            # return HttpResponseRedirect(reverse('register'))
-
-    else:
+    if request.method != "POST":
         return render(request, 'app_users/login.html')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    if user := authenticate(username=username, password=password):
+        if user.is_active:
+            login(request,user)
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return HttpResponse("ACCOUNT IS DEACTIVATED")
+    else:
+        return HttpResponse("Please use correct id and password")
 
 
 @login_required
